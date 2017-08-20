@@ -87,7 +87,7 @@ class gera_senha_dao
         return $teste;
     }
 
-    public function listaSenha( $gera_senha ){
+    public function listaGera_senha( $gera_senha ){
         require_once "class.connection_factory.php";
         require_once "../model/class.gera_senha.php";
         require_once "../services/class.gera_senhaList.php";
@@ -118,7 +118,7 @@ class gera_senha_dao
         return $objList;
     }
 
-    public function getSenha( $gera_senha ){
+    public function getGera_Senha( $gera_senha ){
         require_once "class.connection_factory.php";
         require_once "../model/class.gera_senha.php";
         $obj = null;

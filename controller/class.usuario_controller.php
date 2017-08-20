@@ -28,4 +28,32 @@ class usuario_controller
         $teste = $objDao->delete( $usuario );
         return $teste;
     }
+
+    public function ativarSenha ( usuario $usuario ){
+        require_once "../dao/class.usuario_dao.php";
+        $objDao = new usuario_dao();
+        $teste = $objDao->ativarSenha( $usuario );
+        return $teste;
+    }
+
+    public function listaUsuario( $usuario ){
+        require_once "../dao/class.usuario_dao.php";
+        $objDao = new usuario_dao();
+        $teste = $objDao->listaUsuario( $usuario );
+        return $teste;
+    }
+
+    public function getUsuario( $usuario ){
+        require_once "../dao/class.usuario_dao.php";
+        $objDao = new usuario_dao();
+        $teste = $objDao->getUsuario( $usuario );
+        return $teste;
+    }
+
+    public function loginSenha( $usuario, $senha ){
+        require_once "../dao/class.usuario_dao.php";
+        $objDao = new usuario_dao();
+        $teste = $objDao->loginSenha( $usuario, $senha );
+        return $teste;
+    }
 }
