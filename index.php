@@ -8,6 +8,7 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/datepicker3.css" rel="stylesheet">
 <link href="css/styles.css" rel="stylesheet">
+<link href="css/loader.css" rel="stylesheet">
 
 <!--[if lt IE 9]>
 <script src="js/html5shiv.js"></script>
@@ -17,7 +18,10 @@
 </head>
 
 <body>
-	
+    <div class="progress" style="margin-top: -50px; position: absolute;">
+        <div class="indeterminate"></div>
+    </div>
+	<p class="mensagem alert" style="margin-top: -70px; margin-left: -15px; text-align: center; width: 110%;"></p>
 	<div class="row">
 		<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
 			<div class="login-panel panel panel-default">
@@ -26,17 +30,17 @@
 					<form role="form">
 						<fieldset>
 							<div class="form-group">
-								<input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
+								<input class="form-control" placeholder="Usu&aacute;rio" name="usuario" id="usuario" type="text" autofocus="">
 							</div>
 							<div class="form-group">
-								<input class="form-control" placeholder="Password" name="password" type="password" value="">
+								<input class="form-control" placeholder="Password" name="password" id="pwd" type="password" value="">
 							</div>
 							<div class="checkbox">
 								<label>
-									<input name="remember" type="checkbox" value="Remember Me">Remember Me
+									<input name="remember" id="lembrar" type="checkbox" value="Remember Me">Remember Me
 								</label>
 							</div>
-							<a href="index1.html" class="btn btn-primary">Login</a>
+							<a href="#" class="btn btn-primary btn-login">Login</a>
 						</fieldset>
 					</form>
 				</div>
@@ -67,7 +71,8 @@
 		$(window).on('resize', function () {
 		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
 		})
-	</script>	
+	</script>
+<script src="js/login.js"></script>
 </body>
 
 </html>

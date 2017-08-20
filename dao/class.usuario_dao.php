@@ -18,9 +18,9 @@ class usuario_dao
        try{
 
            $sql = "INSERT INTO usuario 
-                  (CD_USUARIO, NM_USUARIO, DS_LOGIN, DS_SENHA, SN_ATIVO)  
+                  (CD_USUARIO, NM_USUARIO, DS_LOGIN, DS_SENHA, SN_ATIVO, SN_SENHA_ATUAL)  
                   VALUES
-                  (NULL, :NM_USUARIO, :DS_LOGIN, MD5( :DS_SENHA ), 'N')";
+                  (NULL, :NM_USUARIO, :DS_LOGIN, MD5( :DS_SENHA ), 'S', 'N')";
            $stmt = $this->connection->prepare( $sql );
            $stmt->bindValue( ":NM_USUARIO", $usuario->getNmUsuario(), PDO::PARAM_STR );
            $stmt->bindValue( ":DS_LOGIN", $usuario->getDsLogin(), PDO::PARAM_STR );
@@ -49,7 +49,8 @@ class usuario_dao
                      NM_USUARIO = :NM_USUARIO
                     ,DS_LOGIN   = :DS_LOGIN
                     ,DS_SENHA   = md5(:DS_SENHA)
-                    ,SN_ATIVO   = 'N'
+                    ,SN_ATIVO   = 'S'
+                    ,SN_SENHA_ATUAL = 'N'
                     WHERE CD_USUARIO = :CD_USUARIO";
             $stmt = $this->connection->prepare( $sql );
             $stmt->bindValue( ":NM_USUARIO", $usuario->getNmUsuario(), PDO::PARAM_STR );
@@ -78,7 +79,7 @@ class usuario_dao
 
             $sql = "UPDATE usuario SET
                      DS_SENHA   = md5(:DS_SENHA)
-                    ,SN_ATIVO   = 'S'
+                    ,SN_SENHA_ATUAL   = 'S'
                     WHERE CD_USUARIO = :CD_USUARIO";
             $stmt = $this->connection->prepare( $sql );
 
@@ -129,7 +130,7 @@ class usuario_dao
         $objList = new usuarioList();
         try{
 
-            $sql = "SELECT * FROM usuario WHERE NM_USUARIO LIKE :USUARIO";
+            $sql = "SELECT * FROM usuario ";
             $stmt = $this->connection->prepare( $sql );
 
             $stmt->bindValue( ":USUARIO", $usuario, PDO::PARAM_STR );
@@ -140,6 +141,7 @@ class usuario_dao
                 $obj->setNmUsuario( $row['NM_USUARIO'] );
                 $obj->setDsLogin( $row['DS_LOGIN'] );
                 $obj->setSnAtivo( $row['SN_ATIVO'] );
+                $obj->setSnSenhaAtual( $row['SN_SENHA_ATUAL'] );
                 $objList->addUsuario( $obj );
             }
 
@@ -172,6 +174,7 @@ class usuario_dao
                 $obj->setNmUsuario( $row['NM_USUARIO'] );
                 $obj->setDsLogin( $row['DS_LOGIN'] );
                 $obj->setSnAtivo( $row['SN_ATIVO'] );
+                $obj->setSnSenhaAtual( $row['SN_SENHA_ATUAL'] );
             }
 
 
@@ -204,6 +207,7 @@ class usuario_dao
                 $obj->setNmUsuario( $row['NM_USUARIO'] );
                 $obj->setDsLogin( $row['DS_LOGIN'] );
                 $obj->setSnAtivo( $row['SN_ATIVO'] );
+                $obj->setSnSenhaAtual( $row['SN_SENHA_ATUAL'] );
             }
 
 

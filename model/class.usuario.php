@@ -13,6 +13,26 @@ class usuario
     private $dsLogin;
     private $dsSenha;
     private $snAtivo;
+    private $snSenhaAtual;
+
+    /**
+     * @return mixed
+     */
+    public function getSnSenhaAtual()
+    {
+        return $this->snSenhaAtual;
+    }
+
+    /**
+     * @param mixed $snSenhaAtual
+     * @return usuario
+     */
+    public function setSnSenhaAtual($snSenhaAtual)
+    {
+        $this->snSenhaAtual = $snSenhaAtual;
+        return $this;
+    }
+
 
     /**
      * @return mixed
