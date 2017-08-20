@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<?php include "include/head.php"?>
+<?php include "include/head.php";
+   $id = $_POST['id'];
+?>
 
 <body>
 <link href="css/loader.css" rel="stylesheet">
@@ -61,8 +63,8 @@
             <div class="panel panel-default">
 
                 <div class="panel-body">
-                    <input id="id" type="hidden" value="0" />
-                    <input id="acao" type="hidden" value="I" />
+                    <input id="id" type="hidden" value="<?= $id ?>"/>
+                    <input id="acao" type="hidden" value="A" />
                     <div class="form-group col-lg-10">
                         <label for="nome">Nome</label>
                         <input id="nome" class="form-control" />

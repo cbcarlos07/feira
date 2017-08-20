@@ -11,9 +11,20 @@ $login = "";
 $senha = "";
 $lembrar = "";
 $nome = "";
+$ativo = "";
+$id = 0;
 if( isset( $_POST['login'] ) ){
     $login = $_POST['login'];
 }
+
+if( isset( $_POST['id'] ) ){
+    $id = $_POST['id'];
+}
+
+if( isset( $_POST['ativo'] ) ){
+    $ativo = $_POST['ativo'];
+}
+
 
 if( isset( $_POST['nome'] ) ){
     $nome = $_POST['nome'];
@@ -35,8 +46,15 @@ switch ( $acao ){
         getListUsuarios();
         break;
     case 'I':
-        inserir( $nome, $login, $senha );
+        inserir( $nome, $login, $senha, $ativo );
         break;
+    case 'V':
+        verificarLogin( $login );
+        break;
+    case 'G':
+        getUser( $id );
+        break;
+
 
 
 }
@@ -101,19 +119,29 @@ function getListUsuarios(){
     while ( $userList->hasNextUsuario() ){
         $usuario = $userList->getNextUsuario();
         $usuarios[] = array(
-            "codigo" => $usuario->getCdUsuario(),
-            "nome"   => $usuario->getNmUsuario(),
+            "id" => $usuario->getCdUsuario(),
+            "name"   => $usuario->getNmUsuario(),
             "login"  => $usuario->getDsLogin(),
             "ativo"  => $usuario->getSnAtivo()
         );
     }
+  //  $dados_json = json_encode( $usuarios );
 
+// Cria o arquivo cadastro.json
+// O parâmetro "a" indica que o arquivo será aberto para escrita
+  //  $fp = fopen("../tables/data3.json", "a");
+
+    // Escreve o conteúdo JSON no arquivo
+    //$escreve = fwrite($fp, $dados_json);
+
+
+  //  fclose($fp);
     echo json_encode( array( "usuarios" => $usuarios ) );
 
 
 }
 
-function inserir ( $nome, $login, $senha ){
+function inserir ( $nome, $login, $senha, $ativo ){
     require_once "../controller/class.usuario_controller.php";
     require_once "../model/class.usuario.php";
 
@@ -121,6 +149,7 @@ function inserir ( $nome, $login, $senha ){
     $usuario->setNmUsuario( $nome );
     $usuario->setDsLogin( $login );
     $usuario->setDsSenha( $senha );
+    $usuario->setSnAtivo( $ativo);
     $uc = new usuario_controller();
     $teste = $uc->insert( $usuario );
     if( $teste ){
@@ -133,7 +162,31 @@ function inserir ( $nome, $login, $senha ){
         echo json_encode( array( "sucesso" => 0 ) );
 
     }
+}
 
+function verificarLogin( $login ){
+    require_once "../controller/class.usuario_controller.php";
 
+    $uc = new usuario_controller();
+    $teste = $uc->verificarLogin( $login );
+    if( $teste ){
+        echo json_encode( array( "success" => 0 ));
+    }else{
+        echo json_encode( array( "success" => 1 ));
+    }
+}
+
+function getUser($id){
+    require_once "../controller/class.usuario_controller.php";
+    require_once "../model/class.usuario.php";
+
+    $uc = new usuario_controller();
+    $usuario = $uc->getUsuario( $id );
+
+    $obj['nome']   = $usuario->getNmUsuario();
+    $obj['login']  = $usuario->getDsLogin();
+    $obj['ativo']  = $usuario->getSnAtivo();
+
+    echo json_encode( $obj );
 
 }

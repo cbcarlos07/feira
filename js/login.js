@@ -88,7 +88,7 @@ function carregando(){
 function sucesso(){
     var mensagem = $('.mensagem');
     mensagem.empty().html('<p class="alert alert-success"><strong>OK.</strong> Estamos redirecionando </p>').fadeIn("fast");
-    var url = 'index1.html';
+    var url = 'usuarios.php';
     var form = $('<form action="' + url + '" method="post">' +
 
         '</form>');

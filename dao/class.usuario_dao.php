@@ -20,11 +20,12 @@ class usuario_dao
            $sql = "INSERT INTO usuario 
                   (CD_USUARIO, NM_USUARIO, DS_LOGIN, DS_SENHA, SN_ATIVO, SN_SENHA_ATUAL)  
                   VALUES
-                  (NULL, :NM_USUARIO, :DS_LOGIN, MD5( :DS_SENHA ), 'S', 'N')";
+                  (NULL, :NM_USUARIO, :DS_LOGIN, MD5( :DS_SENHA ), :SN_ATIVO, 'N')";
            $stmt = $this->connection->prepare( $sql );
            $stmt->bindValue( ":NM_USUARIO", $usuario->getNmUsuario(), PDO::PARAM_STR );
            $stmt->bindValue( ":DS_LOGIN", $usuario->getDsLogin(), PDO::PARAM_STR );
            $stmt->bindValue( ":DS_SENHA", $usuario->getDsSenha(), PDO::PARAM_STR );
+           $stmt->bindValue( ":SN_ATIVO", $usuario->getSnAtivo(), PDO::PARAM_STR );
            $stmt->execute();
            $this->connection->commit();
            $teste = true;
@@ -49,13 +50,14 @@ class usuario_dao
                      NM_USUARIO = :NM_USUARIO
                     ,DS_LOGIN   = :DS_LOGIN
                     ,DS_SENHA   = md5(:DS_SENHA)
-                    ,SN_ATIVO   = 'S'
+                    ,SN_ATIVO   = :SN_ATIVO
                     ,SN_SENHA_ATUAL = 'N'
                     WHERE CD_USUARIO = :CD_USUARIO";
             $stmt = $this->connection->prepare( $sql );
             $stmt->bindValue( ":NM_USUARIO", $usuario->getNmUsuario(), PDO::PARAM_STR );
             $stmt->bindValue( ":DS_LOGIN", $usuario->getDsLogin(), PDO::PARAM_STR );
             $stmt->bindValue( ":DS_SENHA", $usuario->getDsSenha(), PDO::PARAM_STR );
+            $stmt->bindValue( ":SN_ATIVO", $usuario->getSnAtivo(), PDO::PARAM_STR );
             $stmt->bindValue( ":CD_USUARIO", $usuario->getCdUsuario(), PDO::PARAM_INT );
             $stmt->execute();
             $this->connection->commit();
@@ -208,6 +210,35 @@ class usuario_dao
                 $obj->setDsLogin( $row['DS_LOGIN'] );
                 $obj->setSnAtivo( $row['SN_ATIVO'] );
                 $obj->setSnSenhaAtual( $row['SN_SENHA_ATUAL'] );
+            }
+
+
+            $this->connection = null;
+
+
+        }catch ( PDOException $exception ){
+            Echo "Erro: ".$exception->getMessage();
+        }
+        return $obj;
+    }
+
+    public function verificarLogin( $usuario ){
+        require_once "class.connection_factory.php";
+        require_once "../model/class.usuario.php";
+        $obj = false;
+        $this->connection = new connection();
+
+        try{
+
+            $sql = "SELECT * FROM usuario WHERE DS_LOGIN = :DS_LOGIN ";
+            $stmt = $this->connection->prepare( $sql );
+
+            $stmt->bindValue( ":DS_LOGIN", $usuario, PDO::PARAM_STR );
+
+            $stmt->execute();
+            if ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ){
+                $obj =  true;
+
             }
 
 

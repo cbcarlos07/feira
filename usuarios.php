@@ -30,7 +30,7 @@
 				<div class="panel panel-default">
 
 					<div class="panel-body">
-						<table data-toggle="table"   data-show-refresh="true" data-show-toggle="true" data-show-columns="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc">
+						<table data-toggle="table"  class="table-user" data-url="tables/data3.json" data-show-refresh="true" data-show-toggle="true" data-show-columns="true"  data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc">
 						    <thead>
 						    <tr>
 						        <!--<th data-field="state" data-checkbox="true" >ID</th>-->
@@ -38,7 +38,7 @@
 						        <th data-field="name"  data-sortable="true">NOME</th>
 						        <th data-field="login"  data-sortable="true">LOGIN</th>
 						        <th data-field="ativo" data-sortable="true">ATIVO</th>
-						        <th data-field="ativo" data-sortable="true"></th>
+						        <th data-field="" data-sortable="true"></th>
 						    </tr>
 						    </thead>
                             <tbody class="tbody"></tbody>

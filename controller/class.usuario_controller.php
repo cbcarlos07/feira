@@ -56,4 +56,11 @@ class usuario_controller
         $teste = $objDao->loginSenha( $usuario, $senha );
         return $teste;
     }
+
+    public function verificarLogin( $usuario ){
+        require_once "../dao/class.usuario_dao.php";
+        $objDao = new usuario_dao();
+        $teste = $objDao->verificarLogin( $usuario );
+        return $teste;
+    }
 }
