@@ -15,17 +15,16 @@ class prestador_dao
        $teste = false;
        $this->connection = new connection();
        $this->connection->beginTransaction();
+
        try{
 
            $sql = "INSERT INTO prestador 
-                  (CD_PRESTADOR, NM_PRESTADOR, CD_TIPO_CONSELHO, NR_CONSELHO, CD_ESPECIALIDADE)  
+                  (CD_PRESTADOR, NM_PRESTADOR, CD_ESPECIALIDADE)  
                   VALUES
-                  ( NULL, :NM_PRESTADOR, :CD_TIPO_CONSELHO, :NR_CONSELHO, :CD_ESPECIALIDADE )";
+                  ( NULL, :NM_PRESTADOR,  :CD_ESPECIALIDADE )";
            $stmt = $this->connection->prepare( $sql );
            $stmt->bindValue( ":NM_PRESTADOR", $prestador->getNmPrestador(), PDO::PARAM_STR );
-           $stmt->bindValue( ":CD_TIPO_CONSELHO", $prestador->getTipoConselho(), PDO::PARAM_STR );
-           $stmt->bindValue( ":NR_CONSELHO", $prestador->getNrConselho(), PDO::PARAM_STR );
-           $stmt->bindValue( ":CD_ESPECIALIDADE", $prestador->getEspecialidade(), PDO::PARAM_STR );
+           $stmt->bindValue( ":CD_ESPECIALIDADE", $prestador->getEspecialidade()->getCdEspecialidade(), PDO::PARAM_INT );
            $stmt->execute();
            $this->connection->commit();
            $teste = true;
@@ -47,16 +46,12 @@ class prestador_dao
         try{
 
             $sql = "UPDATE prestador SET
-                       NM_PRESTADOR = :NM_PRESTADOR 
-                      ,CD_TIPO_CONSELHO      = :CD_TIPO_CONSELHO
-                      ,NR_CONSELHO     = :NR_CONSELHO
+                       NM_PRESTADOR = :NM_PRESTADOR
                       ,CD_ESPECIALIDADE = :CD_ESPECIALIDADE
                     WHERE CD_PRESTADOR = :CD_PRESTADOR";
             $stmt = $this->connection->prepare( $sql );
             $stmt->bindValue( ":NM_PRESTADOR", $prestador->getNmPrestador(), PDO::PARAM_STR );
-            $stmt->bindValue( ":CD_TIPO_CONSELHO", $prestador->getTipoConselho(), PDO::PARAM_STR );
-            $stmt->bindValue( ":NR_CONSELHO", $prestador->getNrConselho(), PDO::PARAM_STR );
-            $stmt->bindValue( ":CD_ESPECIALIDADE", $prestador->getEspecialidade(), PDO::PARAM_STR );
+            $stmt->bindValue( ":CD_ESPECIALIDADE", $prestador->getEspecialidade()->getCdEspecialidade(), PDO::PARAM_INT );
             $stmt->bindValue( ":CD_PRESTADOR", $prestador->getCdPrestador(), PDO::PARAM_INT );
             $stmt->execute();
             $this->connection->commit();
@@ -99,13 +94,19 @@ class prestador_dao
     public function listaPrestador( $prestador ){
         require_once "class.connection_factory.php";
         require_once "../model/class.prestador.php";
+        require_once "../model/class.especialidade.php";
+        require_once "../model/class.tipo_conselho.php";
         require_once "../services/class.prestadorList.php";
 
         $this->connection = new connection();
         $objList = new prestadorList();
         try{
 
-            $sql = "SELECT * FROM prestador WHERE NM_PRESTADOR LIKE :PACIENTE";
+            $sql = "SELECT P.*, E.DS_ESPECIALIDADE
+                      FROM prestador P
+                      JOIN especialidade E 
+                  WHERE P.NM_PRESTADOR LIKE :PACIENTE
+                    AND P.CD_ESPECIALIDADE = E.CD_ESPECIALIDADE";
             $stmt = $this->connection->prepare( $sql );
 
             $stmt->bindValue( ":PACIENTE", $prestador, PDO::PARAM_STR );
@@ -114,9 +115,9 @@ class prestador_dao
                 $obj = new prestador();
                 $obj->setCdPrestador( $row['CD_PRESTADOR'] );
                 $obj->setNmPrestador( $row['NM_PRESTADOR'] );
-                $obj->setTipoConselho( $row['CD_TIPO_CONSELHO'] );
-                $obj->setNrConselho( $row['NR_CONSELHO'] );
-                $obj->setCdPrestador( $row['CD_ESPECIALIDADE'] );
+                $obj->setEspecialidade( new especialidade() );
+                $obj->getEspecialidade()->setCdEspecialidade( $row['CD_ESPECIALIDADE'] );
+                $obj->getEspecialidade()->setDsEspecialidade( $row['DS_ESPECIALIDADE'] );
                 $objList->addPrestador( $obj );
             }
 
@@ -133,12 +134,17 @@ class prestador_dao
     public function getPrestador( $prestador ){
         require_once "class.connection_factory.php";
         require_once "../model/class.prestador.php";
+        require_once "../model/class.especialidade.php";
+        require_once "../model/class.tipo_conselho.php";
         $obj = null;
         $this->connection = new connection();
 
         try{
 
-            $sql = "SELECT * FROM prestador WHERE CD_PRESTADOR = :CD_PRESTADOR";
+            $sql = "SELECT P.*, E.DS_ESPECIALIDADE FROM prestador P
+                    JOIN especialidade E
+                    WHERE P.CD_PRESTADOR = :CD_PRESTADOR
+                      AND E.CD_ESPECIALIDADE = P.CD_ESPECIALIDADE";
             $stmt = $this->connection->prepare( $sql );
 
             $stmt->bindValue( ":CD_PRESTADOR", $prestador, PDO::PARAM_INT );
@@ -147,9 +153,9 @@ class prestador_dao
                 $obj = new prestador();
                 $obj->setCdPrestador( $row['CD_PRESTADOR'] );
                 $obj->setNmPrestador( $row['NM_PRESTADOR'] );
-                $obj->setTipoConselho( $row['CD_TIPO_CONSELHO'] );
-                $obj->setNrConselho( $row['NR_CONSELHO'] );
-                $obj->setEspecialidade( $row['CD_ESPECIALIDADE'] );
+                $obj->setEspecialidade( new especialidade() );
+                $obj->getEspecialidade()->setCdEspecialidade( $row['CD_ESPECIALIDADE'] );
+                $obj->getEspecialidade()->setDsEspecialidade( $row['DS_ESPECIALIDADE'] );
             }
 
 

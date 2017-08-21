@@ -71,8 +71,18 @@ $('#senha').on('blur', function () {
    validarcampos();
 });
 
+$('#senha').on('keyup', function () {
+    validarSenha();
+    validarcampos();
+});
+
 $('#repetir').on('blur', function () {
     validarSenha();
+});
+
+$('#repetir').on('keyup', function () {
+    validarSenha();
+    validarcampos();
 });
 
 $('.btn-cancelar').on('click', function () {
@@ -82,6 +92,8 @@ $('.btn-cancelar').on('click', function () {
 $('.btn-sim').on('click', function () {
     location.href = "usuarios.php";
 });
+
+
 
 $('.btn-salvar').on('click',function () {
     if( validarcampos() ){
@@ -184,11 +196,54 @@ function getUsuarios() {
                         "<td>"+ check +"</td>"+
                         "<td>" +
                             "<a href='#editar' class='btn btn-warning btn-editar' title='Editar' data-id='"+ j.id +"'><i class='fa fa-pencil-square-o'></i> Editar </a> &nbsp;" +
-                            "<a href='#excluir' class='btn btn-danger btn-excluir' title='Excluir' data-id='"+ j.id +"'><i class='fa fa-times'></i> Excluir</a>" +
+                            "<a href='#excluir' class='btn btn-danger btn-excluir' title='Excluir' data-id='"+ j.id +"' data-nome='"+ j.name +"'><i class='fa fa-times'></i> Excluir</a>" +
                         "</td>"+
                     "</tr>"
+
+
                 );
             } );
+
+            $('.btn-editar').on('click', function () {
+                console.log("Editar");
+                var id = $(this).data('id');
+                var form = $('<form method="post" action="usuarioalt.php">'+
+                    '<input type="hidden" name="id" value="'+ id +'" />'+
+                    '</form>');
+                $('body').append(form);
+                form.submit();
+            });
+
+            $('.btn-excluir').on('click', function () {
+                console.log("Editar");
+                var id = $(this).data('id');
+                var nome = $(this).data('nome');
+                $('span.user-nome').text(nome);
+                $('.modal-question').modal('show');
+                $('.btn-sim').on('click', function () {
+                    $.ajax({
+                        url  : 'function/usuario.php',
+                        type : 'post',
+                        dataType: 'json',
+                        befereSend : aguardando,
+                        data : {
+                            acao : 'E',
+                            id   : id
+                        },
+                        success : function (data) {
+
+                            $('.progress').fadeOut();
+                            if( data.success === 1 ){
+                                msgSucesso();
+                            }else{
+                                erroSend();
+                            }
+                        }
+                    });
+                });
+
+
+            });
 
         }
     });
@@ -257,8 +312,8 @@ function erroSend() {
 
 function msgSucesso() {
     var mensagem = $('.mensagem');
-    mensagem.empty().html("<p class='alert alert-success'><strong>Parab&ecirc;ns</strong> Opera&ccedil;&atilde;o realizada com sucesso! </p>").fadeIn();
+    mensagem.empty().html("<p class='alert alert-success'><strong>Parab&eacute;ns</strong> Opera&ccedil;&atilde;o realizada com sucesso! </p>").fadeIn();
     setTimeout(function () {
         location.href = "usuarios.php";
-    },2000);
+    },3000);
 }

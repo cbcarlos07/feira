@@ -13,11 +13,11 @@
 
 <?php include "include/menu_bar.php" ?>
 
-<div class="progress" style="margin-top: -50px; position: absolute; ">
+<div class="progress" style="margin-top: -50px; position: absolute; z-index: 2;">
     <div class="indeterminate"></div>
 </div>
 <div class="mensagem"
-   style="margin-top: -65px; margin-left: -15px; text-align: center; width: 110%; position: relative; font-size: 12px;">
+     style="margin-top: -65px; margin-left: -15px; text-align: center; width: 110%; position: relative; font-size: 12px; z-index: 3">
     <p>Mensagem de retorno</p>
 </div>
 
@@ -46,13 +46,13 @@
     <div class="row">
         <ol class="breadcrumb">
             <li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-            <li class="active">Usu&aacute;rios / Cadastrar Usu&aacute;rios</li>
+            <li class="active">Usu&aacute;rios / Alterar Cadastrar Usu&aacute;rios</li>
         </ol>
     </div><!--/.row-->
 
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header col-lg-9">Cadastrar Usu&aacute;rio</h1>
+            <h1 class="page-header col-lg-9">Alterar Cadastrar Usu&aacute;rio</h1>
 
         </div>
     </div><!--/.row-->
@@ -71,7 +71,7 @@
                     </div>
                     <div class="form-group col-lg-5">
                         <label for="login">Login</label>
-                        <input id="login" class="form-control" />
+                        <input id="login" class="form-control" disabled="disabled"/>
                         <span class="login-error" style="color: red"></span>
                     </div>
                     <div class="row"></div>

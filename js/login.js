@@ -4,7 +4,33 @@
 
 $(document).ready(function () {
    $('.progress').fadeOut();
+   getUser( $('#id').val() );
 });
+
+function getUser( id ) {
+   // console.log("Codigo para alterar: "+id);
+    if( id > 0 ){
+
+        $.ajax({
+            url  : 'function/usuario.php',
+            type : 'post',
+            dataType : 'json',
+            data : {
+                acao : 'G',
+                id   : id
+            },
+            success : function (data) {
+                var nomeCompleto = data.nome;
+                //console.log("Nome completo: "+nomeCompleto);
+                var firstName = nomeCompleto.split(" ");
+                //console.log("Primeiro nome: "+firstName[0]);
+                $('span.nome-user').text( firstName[0] );
+            }
+        })
+
+    }
+}
+
 
 $('.btn-login').on( 'click', function () {
    
@@ -33,6 +59,12 @@ $('.btn-login').on( 'click', function () {
                 $('.progress').fadeOut();
                 if( data.sucesso === 1 ){
                     sucesso(  );
+                }else if( data.sucesso === 0 ){
+                    var form = $('<form action="alterarSenha.php" method="post">' +
+                                    '<input value="'+ data.codigo +'" name="id" />'+
+                                '</form>');
+                    $('body').append( form );
+                    form.submit();
                 }else{
                     errosend();
                 }
@@ -79,7 +111,7 @@ function corCampo( id, cor ) {
 function carregando(){
     var mensagem = $('.mensagem');
     //alert('Carregando: '+mensagem);
-    $('.progress').fadeIn();
+ //   $('.progress').fadeIn();
 
 
 }
@@ -94,6 +126,7 @@ function sucesso(){
         '</form>');
     $('body').append(form);
     form.submit();
+
     //   location.href = "usuario?acao=S";
 
     //window.setTimeout()
@@ -104,3 +137,66 @@ function errosend(){
     var mensagem = $('.mensagem');
     mensagem.empty().html('<p class="alert alert-danger"><strong>Opa!</strong> Por favor, verifique seu login e/ou sua senha</p>').fadeIn("fast");
 }
+
+$('#pwd').on('keyup', function () {
+    validarSenha();
+
+});
+
+$('#pwd1').on('keyup', function () {
+    validarSenha();
+
+});
+
+function validarSenha() {
+    var senha = $('#pwd').val();
+    var senha1 = $('#pwd1').val();
+    if( senha.length < 6 ){
+        $('span.alerta-senha').text('A senha tem que ser no mínimo 6 dígitos');
+        coloriCampo( "pwd", "red" );
+        $('.btn-new-pwd').attr('disabled', true);
+    }else{
+        if( senha == senha1 ){
+            $('.btn-new-pwd').attr('disabled', false);
+            coloriCampo( "pwd", "" );
+            coloriCampo( "pwd1", "" );
+            $('span.alerta-senha').text('');
+            $('span.alerta-senha1').text('');
+
+
+        }else{
+            $('span.alerta-senha').text('');
+            $('span.alerta-senha1').text('As senhas não coincidem');
+            coloriCampo( "pwd1", "red" );
+            $('.btn-new-pwd').attr('disabled', "disa");
+        }
+    }
+
+}
+
+function coloriCampo( id, cor) {
+    $('input[id="'+ id +'"]').css( 'border-color', cor );
+}
+
+$('.btn-new-pwd').on('click', function () {
+        var id = $('#id').val();
+        var senha = $('#senha').val();
+        $.ajax({
+            url  : 'function/usuario.php',
+            dataType : 'json',
+            type : 'post',
+            beforeSend : carregando,
+            data : {
+                acao : 'S',
+                id   : id,
+                senha : senha
+            },
+            success : function (data) {
+                if( data.success === 1 ){
+                    sucesso();
+                }else{
+                    errosend();
+                }
+            }
+        });
+})

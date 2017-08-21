@@ -54,6 +54,16 @@ switch ( $acao ){
     case 'G':
         getUser( $id );
         break;
+    case 'A':
+        update( $id,$nome, $login, $senha, $ativo );
+        break;
+    case 'E':
+        excluir( $id );
+        break;
+    case 'S':
+        ativarSenha( $id, $senha );
+        break;
+
 
 
 
@@ -93,9 +103,12 @@ function logar( $login, $senha, $lembrar ){
 
 
         }else{
-            $_SESSION['login'] = $login;
+
             $retorno['sucesso'] = 0;
+            $nome = explode(" ", $usuario->getNmUsuario() );
+            $_SESSION['nome'] = $nome[0];
             $retorno['codigo']  = $usuario->getCdUsuario();
+
             echo json_encode( $retorno );
 
         }
@@ -164,6 +177,30 @@ function inserir ( $nome, $login, $senha, $ativo ){
     }
 }
 
+function update ( $id, $nome, $login, $senha, $ativo ){
+    require_once "../controller/class.usuario_controller.php";
+    require_once "../model/class.usuario.php";
+
+    $usuario = new usuario();
+    $usuario->setCdUsuario( $id );
+    $usuario->setNmUsuario( $nome );
+    $usuario->setDsLogin( $login );
+    $usuario->setDsSenha( $senha );
+    $usuario->setSnAtivo( $ativo);
+    $uc = new usuario_controller();
+    $teste = $uc->update( $usuario );
+    if( $teste ){
+
+        echo json_encode( array( "sucesso" => 1 ) );
+
+    }
+    else{
+
+        echo json_encode( array( "sucesso" => 0 ) );
+
+    }
+}
+
 function verificarLogin( $login ){
     require_once "../controller/class.usuario_controller.php";
 
@@ -189,4 +226,30 @@ function getUser($id){
 
     echo json_encode( $obj );
 
+}
+
+function excluir( $id ){
+    require_once "../controller/class.usuario_controller.php";
+    $uc = new usuario_controller();
+    $teste = $uc->delete( $id );
+    if( $teste ){
+        echo json_encode( array( "success" => 1) );
+    }else{
+        echo json_encode( array( "success" => 0) );
+    }
+}
+
+function ativarSenha($id, $senha){
+    require_once "../controller/class.usuario_controller.php";
+    require_once "../model/class.usuario.php";
+    $uc = new usuario_controller();
+    $usuario = new usuario();
+    $usuario->setCdUsuario( $id );
+    $usuario->setDsSenha( $senha );
+    $teste = $uc->ativarSenha( $usuario );
+    if( $teste ){
+        echo json_encode( array( "success" => 1 ) );
+    }else{
+        echo json_encode( array( "success" => 0 ) );
+    }
 }

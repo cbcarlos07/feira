@@ -14,6 +14,27 @@ class paciente
     private $nrCasa;
     private $dsComplemento;
     private $especialidade;
+    private $dtNascimento;
+
+    /**
+     * @return mixed
+     */
+    public function getDtNascimento()
+    {
+        return $this->dtNascimento;
+    }
+
+    /**
+     * @param mixed $dtNascimento
+     * @return paciente
+     */
+    public function setDtNascimento($dtNascimento)
+    {
+        $this->dtNascimento = $dtNascimento;
+        return $this;
+    }
+
+
 
     /**
      * @return mixed

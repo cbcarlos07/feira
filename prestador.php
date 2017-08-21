@@ -18,13 +18,20 @@
     </div>
     <div class="modal fade modal-question" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
+
             <div class="modal-content">
+
+                <div class="msgAvisoModal"
+                     style="margin-top: 0;  text-align: center; width: 100%; position: relative; font-size: 12px; z-index: 3">
+                    <p class="alert alert-success">Mensagem de retorno</p>
+                </div>
+
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Aten&ccedil;&atilde;o</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Deseja realmente excluir o usu&aacute;rio <b><span class="user-nome"></span></b>?</p>
+                    <p>Deseja realmente excluir o prestador <b><span class="user-nome"></span></b>?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary btn-sim">Sim</button>
@@ -41,14 +48,14 @@
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">Usu&aacute;rios</li>
+				<li class="active">Prestadores</li>
 			</ol>
 		</div><!--/.row-->
 		
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header col-lg-9">Usu&aacute;rios</h1>
-                <a href="usuariocad.php" class="btn btn-primary col-lg-3" style="margin-top: 20px;">Novo</a>
+				<h1 class="page-header col-lg-9">Prestadores</h1>
+                <a href="prestadorcad.php" class="btn btn-primary col-lg-3" style="margin-top: 20px;">Novo</a>
 			</div>
 		</div><!--/.row-->
 				
@@ -64,8 +71,7 @@
 						        <!--<th data-field="state" data-checkbox="true" >ID</th>-->
 						        <th data-field="id" data-sortable="true">ID</th>
 						        <th data-field="name"  data-sortable="true">NOME</th>
-						        <th data-field="login"  data-sortable="true">LOGIN</th>
-						        <th data-field="ativo" data-sortable="true">ATIVO</th>
+						        <th data-field="name"  data-sortable="true">ESPECIALIDADE</th>
 						        <th data-field="" data-sortable="true"></th>
 						    </tr>
 						    </thead>
@@ -86,7 +92,7 @@
 	<script src="js/chart-data.js"></script>
 	<script src="js/easypiechart.js"></script>
 	<script src="js/easypiechart-data.js"></script>
-	<script src="js/bootstrap-datepicker.js"></script>
+
 	<script src="js/bootstrap-table.js"></script>
 	<script>
 		!function ($) {
@@ -104,7 +110,7 @@
 		})
 	</script>
     <script src="js/selecao.js"></script>
-    <script src="js/usuario.js"></script>
+    <script src="js/prestador.js"></script>
 </body>
 
 </html>

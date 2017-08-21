@@ -12,23 +12,25 @@ class paciente_dao
    public function insert ( paciente $paciente ){
 
        require_once "class.connection_factory.php";
-       $teste = false;
+       $teste = 0;
        $this->connection = new connection();
        $this->connection->beginTransaction();
        try{
 
            $sql = "INSERT INTO paciente 
-                  (CD_PACIENTE, NM_PACIENTE, NR_CEP, NR_CASA, DS_COMPLEMENTO)  
+                  (CD_PACIENTE, NM_PACIENTE, NR_CEP, NR_CASA, DS_COMPLEMENTO, DT_NASCIMENTO)  
                   VALUES
-                  ( NULL, :NM_PACIENTE, :NR_CEP, :NR_CASA, :DS_COMPLEMENTO )";
+                  ( NULL, :NM_PACIENTE, :NR_CEP, :NR_CASA, :DS_COMPLEMENTO, :DT_NASCIMENTO )";
            $stmt = $this->connection->prepare( $sql );
            $stmt->bindValue( ":NM_PACIENTE", $paciente->getNmPaciente(), PDO::PARAM_STR );
            $stmt->bindValue( ":NR_CEP", $paciente->getNrCep(), PDO::PARAM_STR );
            $stmt->bindValue( ":NR_CASA", $paciente->getNrCasa(), PDO::PARAM_STR );
            $stmt->bindValue( ":DS_COMPLEMENTO", $paciente->getDsComplemento(), PDO::PARAM_STR );
+           $stmt->bindValue( ":DT_NASCIMENTO", $paciente->getDtNascimento(), PDO::PARAM_STR );
            $stmt->execute();
+           $teste = $this->connection->lastInsertId();
            $this->connection->commit();
-           $teste = true;
+
            $this->connection = null;
 
 
@@ -51,6 +53,7 @@ class paciente_dao
                       ,NR_CEP      = :NR_CEP
                       ,NR_CASA     = :NR_CASA
                       ,DS_COMPLEMENTO = :DS_COMPLEMENTO
+                      ,DT_NASCIMENTO  = :DT_NASCIMENTO
                     WHERE CD_PACIENTE = :CD_PACIENTE";
             $stmt = $this->connection->prepare( $sql );
             $stmt->bindValue( ":NM_PACIENTE", $paciente->getNmPaciente(), PDO::PARAM_STR );
@@ -150,6 +153,7 @@ class paciente_dao
                 $obj->setNrCep( $row['NR_CEP'] );
                 $obj->setNrCasa( $row['NR_CASA'] );
                 $obj->setDsComplemento( $row['DS_COMPLEMENTO'] );
+                $obj->setDtNascimento( $row['DT_NASCIMENTO'] );
             }
 
 

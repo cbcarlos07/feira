@@ -197,7 +197,7 @@ class usuario_dao
 
         try{
 
-            $sql = "SELECT * FROM usuario WHERE DS_LOGIN = :DS_LOGIN AND md5(:DS_SENHA)";
+            $sql = "SELECT * FROM usuario WHERE DS_LOGIN = :DS_LOGIN AND DS_SENHA = md5(:DS_SENHA)";
             $stmt = $this->connection->prepare( $sql );
 
             $stmt->bindValue( ":DS_LOGIN", $usuario, PDO::PARAM_STR );

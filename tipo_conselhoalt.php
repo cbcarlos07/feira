@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<?php include "include/head.php"?>
+<?php include "include/head.php";
+    $_id = $_POST['id'];
+?>
 
 <body>
 <link href="css/loader.css" rel="stylesheet">
@@ -27,7 +29,7 @@
                 <h4 class="modal-title">Aten&ccedil;&atilde;o</h4>
             </div>
             <div class="modal-body">
-                <p>Deseja realmente voltar &agrave; tela usu&aacute;rios?</p>
+                <p>Deseja realmente voltar &agrave; tela Tipo de Conselho?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary btn-sim">Sim</button>
@@ -44,13 +46,13 @@
     <div class="row">
         <ol class="breadcrumb">
             <li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-            <li class="active">Usu&aacute;rios / Cadastrar Usu&aacute;rios</li>
+            <li class="active">Usu&aacute;rios / Cadastrar Tipo de Conselho</li>
         </ol>
     </div><!--/.row-->
 
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header col-lg-9">Cadastrar Usu&aacute;rio</h1>
+            <h1 class="page-header col-lg-9">Cadastrar Tipo de Conselho</h1>
 
         </div>
     </div><!--/.row-->
@@ -61,33 +63,13 @@
             <div class="panel panel-default">
 
                 <div class="panel-body">
-                    <input id="id" type="hidden" value="0" />
-                    <input id="acao" type="hidden" value="I" />
+                    <input id="id" type="hidden" value="<?= $_id ?>" />
+                    <input id="acao" type="hidden" value="A" />
                     <div class="form-group col-lg-10">
-                        <label for="nome">Nome</label>
-                        <input id="nome" class="form-control" />
+                        <label for="nome">Descri&ccedil;&atilde;o</label>
+                        <input id="descricao" class="form-control" />
                     </div>
-                    <div class="form-group col-lg-5">
-                        <label for="login">Login</label>
-                        <input id="login" class="form-control" />
-                        <span class="login-error" style="color: red"></span>
-                    </div>
-                    <div class="row"></div>
-                    <div class="form-group col-lg-5">
-                        <label for="senha">Digite a senha</label>
-                        <input type="password" id="senha" class="form-control" />
-                        <span class="aviso-senha" style="color: red"></span>
-                    </div>
-                    <div class="form-group col-lg-5">
-                        <label for="repetir">Repita a Senha</label>
-                        <input type="password" id="repetir" class="form-control" />
-                        <span class="aviso-repetir-senha" style="color: red"></span>
-                    </div>
-                    <div class="row"></div>
-                    <div class="form-group checkbox col-lg-2">
-                        <label>
-                            <input type="checkbox" checked id="ativo">Ativo</label>
-                    </div>
+
                     <div class="row"></div>
                     <div class="col-lg-3">
                         <button class="btn btn-success btn-salvar">Salvar</button>
@@ -113,7 +95,7 @@
 <script src="js/easypiechart-data.js"></script>
 
 <script src="js/selecao.js"></script>
-<script src="js/usuario.js"></script>
+<script src="js/tipoconselho.js"></script>
 </body>
 
 </html>
