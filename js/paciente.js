@@ -39,9 +39,10 @@ function comboBoxEspecialidade( id ) {
 
 function getObj( id ) {
     if( id > 0 ){
-
+        var tbody = $('.tbodycad');
+        tbody.find('tr').remove();
         $.ajax({
-            url  : 'function/prestador.php',
+            url  : 'function/paciente.php',
             type : 'post',
             dataType : 'json',
             data : {
@@ -50,7 +51,25 @@ function getObj( id ) {
             },
             success : function (data) {
                 $('#nome').val( data.nome );
-                $('#especialidade').val( data.especialidade );
+                $('#nascimento').val( data.nascimento );
+                $('#cep').val( data.nrcep );
+                $('#nrcasa').val( data.nrcasa );
+                $('#complemento').val( data.complemento );
+
+                $.each(data.fones, function (i, j) {
+                        tbody.append(
+                            "<tr>"+
+                                "<td>" + j.telefone + "</td>"+
+                                "<td>" + j.obs + "</td>"+
+                                "<td>" + j.tipo + "</td>"+
+                                "<td>" + j.strtipo + "</td>"+
+                            "</tr>"
+                        );
+                });
+
+
+                buscarCEP(  );
+                calcularIdade();
 
             }
         })
@@ -92,7 +111,19 @@ $('.btn-salvar').on('click',function () {
             success : function (data) {
                 $('.progress').fadeOut();
                 if( data.sucesso === 1){
-                    $('.modal-especialidade').modal('show');
+                        var action;
+                        if( acao == 'I' )
+                            action = 'I';
+                        else
+                            action = 'U';
+                        $('#id').val(data.paciente);
+                        $('#cdpac').val(id);
+                        $('#acaoModal').val( action );
+                        console.log("Action modal: "+action);
+                        $('.modal-especialidade').modal('show');
+
+
+
                 }else{
                     erroSend();
                 }
@@ -103,7 +134,34 @@ $('.btn-salvar').on('click',function () {
     return false;
 })
 
+$('.btn-ok').on('click', function () {
+   var cdespec = $('#especialidade').val();
+   var paciente = $('#cdpac').val();
+  // alert("Paciente: "+paciente);
+   var acao     = $('#acaoModal').val();
+   console.log("Acao: "+acao);
+   $.ajax({
+       url : 'function/atendimento.php',
+       dataType : 'json',
+       type : 'post',
+       data : {
+            paciente : paciente,
+            especialidade : cdespec,
+            acao : acao
+       },
+       success : function (data) {
+           if( data.sucesso === 1 ){
 
+                $('.progressModal').fadeOut();
+                msgSucessoModal();
+
+           }else{
+               $('.progressModal').fadeOut();
+               erroSendModal();
+           }
+       }
+   });
+});
 
 
 
@@ -139,7 +197,7 @@ function getListObj() {
             $('.btn-editar').on('click', function () {
               //  console.log("Editar");
                 var id = $(this).data('id');
-                var form = $('<form method="post" action="prestadoralt.php">'+
+                var form = $('<form method="post" action="pacientealt.php">'+
                     '<input type="hidden" name="id" value="'+ id +'" />'+
                     '</form>');
                 $('body').append(form);
@@ -154,7 +212,7 @@ function getListObj() {
                 $('.modal-question').modal('show');
                 $('.btn-sim').on('click', function () {
                     $.ajax({
-                        url  : 'function/prestador.php',
+                        url  : 'function/paciente.php',
                         type : 'post',
                         dataType: 'json',
                         befereSend : aguardandoModal,
@@ -226,7 +284,7 @@ function erroSend() {
 }
 
 function aguardandoModal() {
-    var mensagem = $('.mensagem');
+    var mensagem = $('.progressModal');
     mensagem.empty().html("<p class='alert alert-danger'><strong>Ops</strong> Ocorreu um erro ao processar sua requisi&ccedil;&atilde;o </p>").fadeIn();
     setTimeout(function () {
         mensagem.fadeOut('slow');
@@ -247,6 +305,7 @@ function msgSucesso() {
     var mensagem = $('.mensagem');
     mensagem.empty().html("<p class='alert alert-success'><strong>Parab&eacute;ns</strong> Opera&ccedil;&atilde;o realizada com sucesso! </p>").fadeIn();
     setTimeout(function () {
+        mensagem.fadeOut();
         location.href = "paciente.php";
     },3000);
 }

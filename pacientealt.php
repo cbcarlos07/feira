@@ -7,7 +7,9 @@
 <link href="css/jquery.datetimepicker.min.css" rel="stylesheet">
 
 
-<?php include "include/barra_superior.php" ?>
+<?php include "include/barra_superior.php";
+      $_id = $_POST['id'];
+?>
 
 
 <?php include "include/menu_bar.php" ?>
@@ -54,7 +56,8 @@
                 <h4 class="modal-title">Tipo de Atendimento</h4>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="acaoModal">;
+                <input type="hidden" id="acaoModal">
+                <input type="hidden" id="cdpac">;
                 <p>Agora escolha o tipo de atendimento para o paciente</p>
                 <select class="form-control" id="especialidade"></select>
             </div>
@@ -73,13 +76,13 @@
     <div class="row">
         <ol class="breadcrumb">
             <li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-            <li class="active">Usu&aacute;rios / Cadastrar Paciente</li>
+            <li class="active">Usu&aacute;rios / Alterar Cadastro de Paciente</li>
         </ol>
     </div><!--/.row-->
 
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header col-lg-9">Cadastrar Paciente</h1>
+            <h1 class="page-header col-lg-9">Alterar Cadastro de Paciente</h1>
 
         </div>
     </div><!--/.row-->
@@ -90,8 +93,8 @@
             <div class="panel panel-default">
 
                 <div class="panel-body">
-                    <input id="id" type="hidden" value="0" />
-                    <input id="acao" type="hidden" value="I" />
+                    <input id="id" type="hidden" value="<?= $_id ?>" />
+                    <input id="acao" type="hidden" value="A" />
                     <div class="form-group col-lg-10">
                         <label for="nome">Nome</label>
                         <input id="nome" class="form-control" />

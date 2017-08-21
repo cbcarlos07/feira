@@ -44,4 +44,11 @@ class especialidade_controller
         return $teste;
     }
 
+    public function getTotais(  ){
+        require_once "../dao/class.especialidade_dao.php";
+        $objDao = new especialidade_dao();
+        $teste = $objDao->getTotais(  );
+        return $teste;
+    }
+
 }

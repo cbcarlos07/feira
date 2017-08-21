@@ -22,6 +22,13 @@ class atendimento_controller
         return $teste;
     }
 
+    public function updatePaciente ( atendimento $atendimento ){
+        require_once "../dao/class.atendimento_dao.php";
+        $objDao = new atendimento_dao();
+        $teste = $objDao->updatePaciente( $atendimento );
+        return $teste;
+    }
+
     public function delete ( $atendimento ){
         require_once "../dao/class.atendimento_dao.php";
         $objDao = new atendimento_dao();
@@ -41,6 +48,13 @@ class atendimento_controller
         require_once "../dao/class.atendimento_dao.php";
         $objDao = new atendimento_dao();
         $teste = $objDao->getAtendimento( $atendimento );
+        return $teste;
+    }
+
+    public function getPacAtd( $atendimento ){
+        require_once "../dao/class.atendimento_dao.php";
+        $objDao = new atendimento_dao();
+        $teste = $objDao->getPacAtd( $atendimento );
         return $teste;
     }
 

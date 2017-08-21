@@ -26,20 +26,23 @@ if( isset( $_POST['id'] ) ){
 switch ( $acao ){
 
     case 'L':
-        getListObj();
+        getListObj( $especialidade );
         break;
     case 'I':
-        inserir( $descricao );
+        inserir( $paciente, $especialidade );
         break;
 
     case 'G':
         getObj( $id );
         break;
     case 'A':
-        update( $id, $descricao );
+        update( $id, $paciente, $especialidade );
         break;
     case 'E':
         excluir( $id );
+        break;
+    case 'U':
+        updatePaciente( $paciente, $especialidade );
         break;
 
 
@@ -47,21 +50,25 @@ switch ( $acao ){
 
 }
 
-function getListObj(){
-    require_once "../controller/class.especialidade_controller.php";
-    require_once "../services/class.especialidadeListIterator.php";
-    require_once "../model/class.especialidade.php";
+function getListObj( $especialidade ){
+    require_once "../controller/class.atendimento_controller.php";
+    require_once "../services/class.atendimentoListIterator.php";
 
-    $oc = new especialidade_controller();
-    $lista = $oc->listaEspecialidade( '%%' );
-    $objList = new especialidadeListIterator( $lista );
+
+    $oc = new atendimento_controller();
+    $lista = $oc->listaAtendimento( $especialidade );
+    $objList = new atendimentoListIterator( $lista );
     $array = array();
 
-    while ( $objList->hasNextEspecialidade() ){
-        $obj = $objList->getNextEspecialidade();
+    while ( $objList->hasNextAtendimento() ){
+        $obj = $objList->getNextAtendimento();
         $array[] = array(
-            "id"     => $obj->getCdEspecialidade(),
-            "name"   => $obj->getDsEspecialidade()
+            "id"         => $obj->getCdAtendimento(),
+            "paciente"   => $obj->getPaciente()->getCdPaciente(),
+            "nome"       => $obj->getPaciente()->getNmPaciente(),
+            "cdespec"   => $obj->getEspecialidade()->getCdEspecialidade(),
+            "especialidade"   => $obj->getEspecialidade()->getDsEspecialidade()
+
         );
     }
   //  $dados_json = json_encode( $usuarios );
@@ -83,10 +90,14 @@ function getListObj(){
 function inserir ( $paciente, $especialidade ){
     require_once "../controller/class.atendimento_controller.php";
     require_once "../model/class.atendimento.php";
+    require_once "../model/class.paciente.php";
+    require_once "../model/class.especialidade.php";
 
     $obj = new atendimento();
-    $obj->setPaciente( $paciente );
-    $obj->setEspecialidade( $especialidade );
+    $obj->setPaciente( new paciente() );
+    $obj->getPaciente()->setCdPaciente( $paciente );
+    $obj->setEspecialidade( new especialidade() );
+    $obj->getEspecialidade()->setCdEspecialidade( $especialidade );
     $oc = new atendimento_controller();
     $teste = $oc->insert( $obj );
     if( $teste ){
@@ -104,11 +115,15 @@ function inserir ( $paciente, $especialidade ){
 function update ( $id, $paciente, $especialidade ){
     require_once "../controller/class.atendimento_controller.php";
     require_once "../model/class.atendimento.php";
+    require_once "../model/class.paciente.php";
+    require_once "../model/class.especialidade.php";
 
     $obj = new atendimento();
     $obj->setCdAtendimento( $id );
-    $obj->setPaciente( $paciente );
-    $obj->setEspecialidade( $especialidade );
+    $obj->setPaciente( new paciente() );
+    $obj->getPaciente()->setCdPaciente( $paciente );
+    $obj->setEspecialidade( new especialidade() );
+    $obj->getEspecialidade()->setCdEspecialidade( $especialidade );
     $oc = new atendimento_controller();
     $teste = $oc->update( $obj );
     if( $teste ){
@@ -123,6 +138,61 @@ function update ( $id, $paciente, $especialidade ){
     }
 }
 
+
+function updatePaciente ( $paciente, $especialidade ){
+    require_once "../controller/class.atendimento_controller.php";
+    require_once "../model/class.atendimento.php";
+    require_once "../model/class.paciente.php";
+    require_once "../model/class.especialidade.php";
+    //echo "Alterou paciente";
+
+    $oc = new atendimento_controller();
+    $p = $oc->getPacAtd( $paciente );
+
+    if( $p > 0 ){
+        $obj = new atendimento();
+        $obj->setPaciente( new paciente() );
+        $obj->getPaciente()->setCdPaciente( $paciente );
+        $obj->setEspecialidade( new especialidade() );
+        $obj->getEspecialidade()->setCdEspecialidade( $especialidade );
+
+        $teste = $oc->updatePaciente( $obj );
+        if( $teste ){
+
+            echo json_encode( array( "sucesso" => 1 ) );
+
+        }
+        else{
+
+            echo json_encode( array( "sucesso" => 0 ) );
+
+        }
+    }else{
+
+        $obj = new atendimento();
+        $obj->setPaciente( new paciente() );
+        $obj->getPaciente()->setCdPaciente( $paciente );
+        $obj->setEspecialidade( new especialidade() );
+        $obj->getEspecialidade()->setCdEspecialidade( $especialidade );
+
+        $teste = $oc->insert( $obj );
+        if( $teste ){
+
+            echo json_encode( array( "sucesso" => 1 ) );
+
+        }
+        else{
+
+            echo json_encode( array( "sucesso" => 0 ) );
+
+        }
+
+    }
+
+
+}
+
+
 function getObj($id){
     require_once "../controller/class.atendimento_controller.php";
     require_once "../model/class.atendimento.php";
@@ -130,16 +200,17 @@ function getObj($id){
     $oc = new atendimento_controller(); //oc Objeto Controller
     $obj = $oc->getAtendimento( $id );
 
-    $array['id']         = $obj-getCdAtendimento();
-    $array['atendimento']  = $obj->getDsEspecialidade();
+    $array['id']             = $obj->getCdAtendimento();
+    $array['especialidade']  = $obj->getEspecialidade()->getCdEspecialidade();
+    $array['paciente']       = $obj->getPaciente()->getCdPaciente();
 
     echo json_encode( $array );
 
 }
 
 function excluir( $id ){
-    require_once "../controller/class.especialidade_controller.php";
-    $oc = new especialidade_controller();
+    require_once "../controller/class.atendimento_controller.php";
+    $oc = new atendimento_controller();
     $teste = $oc->delete( $id );
     if( $teste ){
         echo json_encode( array( "success" => 1) );

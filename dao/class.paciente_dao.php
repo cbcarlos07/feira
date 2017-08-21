@@ -60,6 +60,7 @@ class paciente_dao
             $stmt->bindValue( ":NR_CEP", $paciente->getNrCep(), PDO::PARAM_STR );
             $stmt->bindValue( ":NR_CASA", $paciente->getNrCasa(), PDO::PARAM_STR );
             $stmt->bindValue( ":DS_COMPLEMENTO", $paciente->getDsComplemento(), PDO::PARAM_STR );
+            $stmt->bindValue( ":DT_NASCIMENTO", $paciente->getDtNascimento(), PDO::PARAM_STR );
             $stmt->bindValue( ":CD_PACIENTE", $paciente->getCdPaciente(), PDO::PARAM_INT );
             $stmt->execute();
             $this->connection->commit();
@@ -141,7 +142,7 @@ class paciente_dao
 
         try{
 
-            $sql = "SELECT * FROM paciente WHERE CD_PACIENTE = :CD_PACIENTE";
+            $sql = "SELECT P.*, DATE_FORMAT(P.DT_NASCIMENTO, '%d/%m/%Y') NASCIMENTO FROM paciente P WHERE P.CD_PACIENTE = :CD_PACIENTE";
             $stmt = $this->connection->prepare( $sql );
 
             $stmt->bindValue( ":CD_PACIENTE", $paciente, PDO::PARAM_INT );
@@ -153,7 +154,7 @@ class paciente_dao
                 $obj->setNrCep( $row['NR_CEP'] );
                 $obj->setNrCasa( $row['NR_CASA'] );
                 $obj->setDsComplemento( $row['DS_COMPLEMENTO'] );
-                $obj->setDtNascimento( $row['DT_NASCIMENTO'] );
+                $obj->setDtNascimento( $row['NASCIMENTO'] );
             }
 
 

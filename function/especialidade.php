@@ -36,6 +36,9 @@ switch ( $acao ){
     case 'E':
         excluir( $id );
         break;
+    case 'Z':
+        getTotais(  );
+        break;
 
 
 
@@ -139,4 +142,24 @@ function excluir( $id ){
     }else{
         echo json_encode( array( "success" => 0) );
     }
+}
+
+function getTotais(){
+    require_once "../controller/class.especialidade_controller.php";
+    require_once "../services/class.especialidadeListIterator.php";
+    require_once "../model/class.especialidade.php";
+
+    $oc = new especialidade_controller();
+    $lista = $oc->getTotais();
+    $listIt = new especialidadeListIterator( $lista );
+    $espec = array();
+    while ( $listIt->hasNextEspecialidade() ){
+        $especialidade = $listIt->getNextEspecialidade();
+        $espec[] = array(
+            "total" => $especialidade->getCdEspecialidade(),
+            "espec" => $especialidade->getDsEspecialidade()
+        );
+    }
+    echo json_encode( $espec );
+
 }

@@ -46,12 +46,36 @@ class atendimento_dao
 
             $sql = "UPDATE atendimento SET
                       CD_ESPECIALIDADE = :CD_ESPECIALIDADE
-                     ,CD_PACIENTE = :CD_PACIENTE
                     WHERE CD_ATENDIMENTO = :CD_ATENDIMENTO";
             $stmt = $this->connection->prepare( $sql );
             $stmt->bindValue( ":CD_ESPECIALIDADE", $atendimento->getEspecialidade()->getCdEspecialidade(), PDO::PARAM_INT );
-            $stmt->bindValue( ":CD_PACIENTE", $atendimento->getPaciente()->getCdPaciente(), PDO::PARAM_INT );
             $stmt->bindValue( ":CD_ATENDIMENTO", $atendimento->getCdAtendimento(), PDO::PARAM_INT );
+            $stmt->execute();
+            $this->connection->commit();
+            $teste = true;
+            $this->connection = null;
+
+
+        }catch ( PDOException $exception ){
+            Echo "Erro: ".$exception->getMessage();
+        }
+        return $teste;
+    }
+
+    public function updatePaciente ( atendimento $atendimento ){
+
+        require_once "class.connection_factory.php";
+        $teste = false;
+        $this->connection = new connection();
+        $this->connection->beginTransaction();
+        try{
+
+            $sql = "UPDATE atendimento SET
+                      CD_ESPECIALIDADE = :CD_ESPECIALIDADE
+                    WHERE CD_PACIENTE = :CD_PACIENTE";
+            $stmt = $this->connection->prepare( $sql );
+            $stmt->bindValue( ":CD_ESPECIALIDADE", $atendimento->getEspecialidade()->getCdEspecialidade(), PDO::PARAM_INT );
+            $stmt->bindValue( ":CD_PACIENTE", $atendimento->getPaciente()->getCdPaciente(), PDO::PARAM_INT );
             $stmt->execute();
             $this->connection->commit();
             $teste = true;
@@ -101,18 +125,10 @@ class atendimento_dao
         $objList = new atendimentoList();
         try{
 
-            $sql = "SELECT  A.*
-                           ,P.NM_PACIENTE
-                           ,E.DS_ESPECIALIDADE 
-                      FROM atendimento A
-                      JOIN especialidade E
-                      JOIN paciente      P
-                     WHERE P.NM_PACIENTE LIKE :atendimento
-                       AND P.CD_PACIENTE = A.CD_PACIENTE
-                       AND E.CD_ESPECIALIDADE = A.CD_ESPECIALIDADE";
+            $sql = "SELECT * FROM v_atendimentos A WHERE A.CD_ESPECIALIDADE = :atendimento ";
             $stmt = $this->connection->prepare( $sql );
 
-            $stmt->bindValue( ":atendimento", $atendimento, PDO::PARAM_STR );
+            $stmt->bindValue( ":atendimento", $atendimento, PDO::PARAM_INT );
             $stmt->execute();
             while ($row = $stmt->fetch( PDO::FETCH_ASSOC )){
                 $obj = new atendimento();
@@ -158,6 +174,33 @@ class atendimento_dao
                 $obj->setEspecialidade( new especialidade() );
                 $obj->getEspecialidade()->setCdEspecialidade( $row['CD_ESPECIALIDADE'] );
                 $obj->getEspecialidade()->setDsEspecialidade( $row['DS_ESPECIALIDADE'] );
+            }
+
+
+            $this->connection = null;
+
+
+        }catch ( PDOException $exception ){
+            Echo "Erro: ".$exception->getMessage();
+        }
+        return $obj;
+    }
+
+    public function getPacAtd( $atendimento ){
+        require_once "class.connection_factory.php";
+        require_once "../model/class.atendimento.php";
+        $obj = 0;
+        $this->connection = new connection();
+
+        try{
+
+            $sql = "SELECT * FROM atendimento WHERE CD_PACIENTE = :CD_PACIENTE";
+            $stmt = $this->connection->prepare( $sql );
+
+            $stmt->bindValue( ":CD_PACIENTE", $atendimento, PDO::PARAM_INT );
+            $stmt->execute();
+            if ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ){
+                $obj = 1;
             }
 
 

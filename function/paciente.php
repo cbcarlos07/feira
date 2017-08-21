@@ -113,7 +113,9 @@ function inserir ( $nome, $nascimento, $cep, $casa, $complemento, $telefone ){
     $obj = new paciente();
     $obj->setNmPaciente( $nome );
     $obj->setDtNascimento( $dataMySQL );
-    $obj->setNrCep( $cep );
+    $subs = array(".","-");
+    $newCEP = str_replace( $subs, "", $cep );
+    $obj->setNrCep( $newCEP );
     $obj->setNrCasa( $casa );
     $obj->setDsComplemento( $complemento );
     $oc = new paciente_controller();
@@ -136,7 +138,7 @@ function inserir ( $nome, $nascimento, $cep, $casa, $complemento, $telefone ){
     }
 
     if( $teste > 0 ){
-        echo json_encode( array( "sucesso" => 1 ) );
+        echo json_encode( array( "sucesso" => 1, "paciente" => $teste ) );
     }
     else{
 
@@ -158,7 +160,9 @@ function update ( $id, $nome, $nascimento, $cep, $casa, $complemento, $telefone 
     $obj->setCdPaciente( $id );
     $obj->setNmPaciente( $nome );
     $obj->setDtNascimento( $dataMySQL );
-    $obj->setNrCep( $cep );
+    $subs = array(".","-");
+    $newCEP = str_replace( $subs, "", $cep );
+    $obj->setNrCep( $newCEP );
     $obj->setNrCasa( $casa );
     $obj->setDsComplemento( $complemento );
     $oc = new paciente_controller();
@@ -193,9 +197,13 @@ function update ( $id, $nome, $nascimento, $cep, $casa, $complemento, $telefone 
 
 function getObj($id){
     require_once "../controller/class.paciente_controller.php";
+    require_once "../controller/class.telefone_paciente_controller.php";
     require_once "../model/class.paciente.php";
+    require_once "../model/class.telefone_paciente.php";
+    require_once "../services/class.telefone_pacienteListIterator.php";
 
     $oc = new paciente_controller(); //oc Objeto Controller
+    $tpc = new telefone_paciente_controller(); //oc Objeto Controller
     $obj = $oc->getPaciente( $id );
 
     $array['id']         = $obj->getCdPaciente();
@@ -205,9 +213,36 @@ function getObj($id){
     $array['nrcasa']     = $obj->getNrCasa();
     $array['complemento'] = $obj->getDsComplemento();
 
+    $l_Tel = $tpc->listaTelefone_paciente( $obj->getCdPaciente() ) ;
+    $telList = new telefone_pacienteListIterator( $l_Tel );
+    $telefones = array();
+    while ( $telList->hasNextTelefone_paciente() ){
+        $fones = $telList->getNextTelefone_paciente();
+        $telefones[] = array(
+            "telefone" => $fones->getNrTelefone(),
+            "tipo"     => $fones->getTpTelefone(),
+            "strtipo"  => getTipoTelefone( $fones->getTpTelefone() ),
+            "obs"      => $fones->getObsTelefone()
+        );
+    }
+    $array['fones'] = $telefones;
+
     echo json_encode( $array );
 
 }
+
+ function getTipoTelefone( $tipo ){
+    $tpTel = "";
+    switch ( $tipo ){
+        case 'C':
+            $tpTel = "Celular";
+            break;
+        case 'R':
+            $tpTel = "Residencial";
+            break;
+    }
+    return $tpTel;
+ }
 
 function excluir( $id ){
     require_once "../controller/class.prestador_controller.php";

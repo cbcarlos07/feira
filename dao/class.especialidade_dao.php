@@ -147,6 +147,38 @@ class especialidade_dao
         return $obj;
     }
 
+    public function getTotais(  ){
+        require_once "class.connection_factory.php";
+        require_once "../model/class.especialidade.php";
+        require_once "../services/class.especialidadeList.php";
+        $obj = null;
+        $this->connection = new connection();
+        $objList = new especialidadeList();
+        try{
+
+            $sql = "SELECT * FROM v_especialidade";
+            $stmt = $this->connection->prepare( $sql );
+
+            $stmt->execute();
+            while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ){
+                $obj = new especialidade();
+                $obj->setCdEspecialidade( $row['TOTAL'] );
+                $obj->setDsEspecialidade( $row['DS_ESPECIALIDADE'] );
+               // echo "Especialidade: ".$row['DS_ESPECIALIDADE'].' Total '.$row['TOTAL'].'\n';
+
+                $objList->addEspecialidade( $obj );
+            }
+
+
+            $this->connection = null;
+
+
+        }catch ( PDOException $exception ){
+            Echo "Erro: ".$exception->getMessage();
+        }
+        return $objList;
+    }
+
  
 
 }
