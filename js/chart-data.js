@@ -1,7 +1,7 @@
-var especialidade = [];
-var totais = [];
-function especFn() {
 
+
+function especFn() {
+    var especialidade = [];
 
     $.ajax({
         url  : 'function/especialidade.php',
@@ -11,25 +11,42 @@ function especFn() {
             acao : 'Z'
         }
         ,success : function (data) {
-            $.each( data, function (i, j) {
-            	//console.log("Espe: "+j.espec);
-                especialidade.push( j.espec );
-                totais.push( j.total )
+           $.each( data, function (i, j) {
+               especialidade.push(j);
+           } );
 
-            } );
-
-            console.log( especialidade );
-            console.log( totais );
 
         }
     });
+    console.log(especialidade);
+    return especialidade;
 
 }
 
 
+function totaisFn() {
 
-var randomScalingFactor = function(){ return Math.round(Math.random()*1000)};
-	
+    var totais = [];
+    $.ajax({
+        url  : 'function/especialidade.php',
+        type : 'post',
+        dataType : 'json',
+        data : {
+            acao : 'T'
+        }
+        ,success : function (data) {
+            $.each( data, function (i, j) {
+                totais.push(j);
+            } );
+
+
+
+        }
+    });
+    return totais;
+
+}
+
 
 
 	var barChartData = {
@@ -38,7 +55,8 @@ var randomScalingFactor = function(){ return Math.round(Math.random()*1000)};
 
 
 			//labels : ["January","February","March","April","May","June","July"],
-		    labels   : especialidade,
+
+		    labels   : especFn(),
 			datasets : [
 
 				{
@@ -47,10 +65,10 @@ var randomScalingFactor = function(){ return Math.round(Math.random()*1000)};
 					highlightFill : "rgba(48, 164, 255, 0.75)",
 					highlightStroke : "rgba(48, 164, 255, 1)",
 					//data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-					data : totais
+					data : totaisFn()
 				}
 			]
-	
+
 		}
 
 	var pieData = [
@@ -114,7 +132,7 @@ window.onload = function(){
 	window.myLine = new Chart(chart1).Line(lineChartData, {
 		responsive: true
 	});*/
-	especFn();
+
 
 
 	var chart2 = document.getElementById("bar-chart").getContext("2d");

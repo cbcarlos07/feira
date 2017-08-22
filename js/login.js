@@ -120,7 +120,7 @@ function carregando(){
 function sucesso(){
     var mensagem = $('.mensagem');
     mensagem.empty().html('<p class="alert alert-success"><strong>OK.</strong> Estamos redirecionando </p>').fadeIn("fast");
-    var url = 'usuarios.php';
+    var url = 'atendimentos.php';
     var form = $('<form action="' + url + '" method="post">' +
 
         '</form>');
@@ -199,4 +199,11 @@ $('.btn-new-pwd').on('click', function () {
                 }
             }
         });
-})
+});
+
+$('#pwd').on('keypress', function(e){
+    if (e.keyCode == 13) {
+        e.preventDefault();
+        $(".btn-login").click();
+    }
+});

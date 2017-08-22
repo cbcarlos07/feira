@@ -44,6 +44,13 @@ class atendimento_controller
         return $teste;
     }
 
+    public function listaAtendimentos( $atendimento ){
+        require_once "dao/class.atendimento_dao.php";
+        $objDao = new atendimento_dao();
+        $teste = $objDao->listaAtendimento( $atendimento );
+        return $teste;
+    }
+
     public function getAtendimento( $atendimento ){
         require_once "../dao/class.atendimento_dao.php";
         $objDao = new atendimento_dao();

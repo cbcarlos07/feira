@@ -10,3 +10,19 @@ $(selector).each(function(){
         $(this).addClass('active');
     }
 });
+
+$('.btn-login').on('click', function () {
+    $.ajax({
+        url  : 'function/usuario.php',
+        type: 'post',
+        dataType : 'json',
+        data : {
+            acao : 'D'
+        },
+        success : function (data) {
+            if( data.success === 1){
+                location.href = "./";
+            }
+        }
+    })
+})

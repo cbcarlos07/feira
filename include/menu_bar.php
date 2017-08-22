@@ -10,13 +10,14 @@
         <li><a href="widgets.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Widgets</a></li>
         <li><a href="charts.html"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Charts</a></li>
         <li><a href="tables.html"><svg class="glyph stroked table"><use xlink:href="#stroked-table"></use></svg> Tables</a></li>-->
+        <li ><a href="atendimentos.php"><i class="fa fa-users" aria-hidden="true"></i> Atendimentos</a></li>
         <li ><a href="usuarios.php"><i class="fa fa-user"></i> Usu&aacute;rios</a></li>
         <li ><a href="especialidade.php"><i class="fa fa-book" aria-hidden="true"></i> Especialidades</a></li>
         <li ><a href="tipo_conselho.php"><i class="fa fa-info" aria-hidden="true"></i> Tipo Conselho</a></li>
         <li ><a href="prestador.php"><i class="fa fa-bullhorn" aria-hidden="true"></i> Prestador</a></li>
         <li ><a href="paciente.php"><i class="fa fa-rss" aria-hidden="true"></i> Paciente</a></li>
-        <li ><a href="atendimentos.php"><i class="fa fa-users" aria-hidden="true"></i> Atendimentos</a></li>
-        <li ><a href="graficos.php"><i class="fa fa-users" aria-hidden="true"></i> Graficos</a></li>
+
+        <!--<li ><a href="graficos.php"><i class="fa fa-users" aria-hidden="true"></i> Graficos</a></li>-->
         <!--<li><a href="panels.html"><svg class="glyph stroked app-window"><use xlink:href="#stroked-app-window"></use></svg> Alerts &amp; Panels</a></li>
         <li><a href="icons.html"><svg class="glyph stroked star"><use xlink:href="#stroked-star"></use></svg> Icons</a></li>
         <li class="parent ">
@@ -42,7 +43,7 @@
             </ul>
         </li>
         <li role="presentation" class="divider"></li>-->
-        <li><a href="login.html"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
+        <li><a href="#login" class="btn-login"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
     </ul>
     <div class="attribution">Template by <a href="http://www.medialoot.com/item/lumino-admin-bootstrap-template/">Medialoot</a><br/><a href="http://www.glyphs.co" style="color: #333;">Icons by Glyphs</a></div>
 </div><!--/.sidebar-->

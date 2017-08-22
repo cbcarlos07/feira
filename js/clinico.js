@@ -165,3 +165,16 @@ function msgSucessoModal() {
 $('#especcombo').on('change', function () {
     console.log("Espec "+$(this).val());
 });
+
+ $('.btn-print').on('click', function () {
+     console.log("Btn print");
+     var combo = $('#especialidade :selected');
+     var espec = combo.val();
+     var especialidade = combo.text();
+     var form = $('<form action="services/pdf.php" method="post">' +
+                     '<input type="hidden" value="'+ espec +'" name="id">'+
+                     '<input type="hidden" value="'+ especialidade +'" name="nome">'+
+                  '</form>');
+     $('body').append(form);
+     form.submit();
+ });

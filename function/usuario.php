@@ -63,6 +63,9 @@ switch ( $acao ){
     case 'S':
         ativarSenha( $id, $senha );
         break;
+    case 'D':
+        logOff(  );
+        break;
 
 
 
@@ -252,4 +255,11 @@ function ativarSenha($id, $senha){
     }else{
         echo json_encode( array( "success" => 0 ) );
     }
+}
+
+function logOff(){
+    session_start();
+    $_SESSION['login'] = null;
+    session_destroy();
+    echo json_encode( array("success" => 1));
 }

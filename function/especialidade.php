@@ -37,7 +37,10 @@ switch ( $acao ){
         excluir( $id );
         break;
     case 'Z':
-        getTotais(  );
+        getListEspecialidades(  );
+        break;
+    case 'T':
+        getListTotais(  );
         break;
 
 
@@ -144,7 +147,7 @@ function excluir( $id ){
     }
 }
 
-function getTotais(){
+function getListEspecialidades(){
     require_once "../controller/class.especialidade_controller.php";
     require_once "../services/class.especialidadeListIterator.php";
     require_once "../model/class.especialidade.php";
@@ -152,14 +155,36 @@ function getTotais(){
     $oc = new especialidade_controller();
     $lista = $oc->getTotais();
     $listIt = new especialidadeListIterator( $lista );
-    $espec = array();
+    $espec = [];
+
     while ( $listIt->hasNextEspecialidade() ){
         $especialidade = $listIt->getNextEspecialidade();
-        $espec[] = array(
-            "total" => $especialidade->getCdEspecialidade(),
-            "espec" => $especialidade->getDsEspecialidade()
-        );
+        array_push( $espec, $especialidade->getDsEspecialidade() );
+
+
     }
     echo json_encode( $espec );
+
+}
+
+function getListTotais(){
+    require_once "../controller/class.especialidade_controller.php";
+    require_once "../services/class.especialidadeListIterator.php";
+    require_once "../model/class.especialidade.php";
+
+    $oc = new especialidade_controller();
+    $lista = $oc->getTotais();
+    $listIt = new especialidadeListIterator( $lista );
+
+    $totais = [];
+
+    while ( $listIt->hasNextEspecialidade() ){
+
+        $especialidade = $listIt->getNextEspecialidade();
+
+        array_push( $totais, $especialidade->getCdEspecialidade() );
+
+    }
+    echo json_encode( $totais );
 
 }

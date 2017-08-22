@@ -87,7 +87,7 @@
                 </div>
                 <div class="col-lg-7"></div>
 
-                <a href="pacientecad.php" class="btn btn-success col-lg-1" style="margin-top: 20px;">Imprimir</a>
+                <a href="#print"  class="btn btn-success col-lg-1 btn-print" style="margin-top: 20px;">Imprimir</a>
 			</div>
 		</div><!--/.row-->
 				
